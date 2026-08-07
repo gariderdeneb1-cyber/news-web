@@ -1,0 +1,4 @@
+.claude/
+uploads/*/
+!uploads/.htaccess
+!uploads/index.html

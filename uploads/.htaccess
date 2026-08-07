@@ -1,0 +1,19 @@
+# Uploaded files must never be executed as scripts, no matter what a
+# filename claims to be. This is the standard defense against an attacker
+# uploading a disguised .php file through the image upload endpoint.
+
+<IfModule mod_php.c>
+  php_flag engine off
+</IfModule>
+<IfModule mod_php7.c>
+  php_flag engine off
+</IfModule>
+<IfModule mod_php8.c>
+  php_flag engine off
+</IfModule>
+
+<FilesMatch "\.(?i:php|phtml|php\d|pl|py|cgi|asp|aspx|sh|exe|jsp)$">
+  Require all denied
+</FilesMatch>
+
+Options -Indexes -ExecCGI

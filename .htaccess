@@ -1,0 +1,43 @@
+### News CMS — Apache config for cPanel/shared hosting ######################
+
+Options -Indexes
+
+<IfModule mod_headers.c>
+  Header set X-Content-Type-Options "nosniff"
+  Header set X-Frame-Options "SAMEORIGIN"
+  Header set Referrer-Policy "strict-origin-when-cross-origin"
+</IfModule>
+
+# Block direct web access to files/folders that should only ever be reached
+# through PHP's own require/include — not by a browser.
+<Files "config.php">
+  Require all denied
+</Files>
+<Files ".htaccess">
+  Require all denied
+</Files>
+<FilesMatch "\.(sql|md)$">
+  Require all denied
+</FilesMatch>
+
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  # Uncomment and adjust if this site lives in a subfolder and rewrites
+  # misbehave (should rarely be necessary):
+  # RewriteBase /
+
+  RewriteRule ^(includes|admin/includes|sql|cron)/ - [F,L]
+
+  # Pretty URLs. Only takes effect for links this site itself generates
+  # (config.php's PRETTY_URLS flag) — if you set PRETTY_URLS to false there,
+  # these rules simply go unused and the plain ?slug=... links keep working.
+  RewriteRule ^news/([^/]+)/?$ news.php?slug=$1 [L,QSA]
+  RewriteRule ^category/([^/]+)/?$ category.php?slug=$1 [L,QSA]
+  RewriteRule ^robots\.txt$ robots.php [L]
+  RewriteRule ^sitemap\.xml$ sitemap.php [L]
+</IfModule>
+
+# news.php already renders a styled "not found" page when ?slug= doesn't
+# match any article, so it doubles as a generic 404 page. If this site is
+# installed in a subfolder, prefix the path below with that subfolder.
+ErrorDocument 404 /news.php
