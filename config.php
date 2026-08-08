@@ -18,7 +18,9 @@ define('SITE_ENV', 'production');              // 'production' or 'development'
 // rules included in this project. If your host doesn't support mod_rewrite,
 // set this to false and the whole site automatically falls back to plain
 // query-string URLs (news.php?slug=..., category.php?slug=...).
-define('PRETTY_URLS', true);
+// Set to false: khaan.mn's cPanel host doesn't apply the /news/... and
+// /category/... rewrite rules, so pretty URLs 404 at the Apache level.
+define('PRETTY_URLS', false);
 
 // Leave empty if this site's domain/subdomain document root points directly
 // at this folder (typical cPanel setup). If you installed it into a
